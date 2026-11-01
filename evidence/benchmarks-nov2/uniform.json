@@ -1,0 +1,193 @@
+{
+  "python": "3.13.5",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+  "requests": 20000,
+  "seed": 1729,
+  "workload": "uniform",
+  "workload_definition": "independent uniform draws from 4096 objects",
+  "trace_sha256": "8f28f1ce36611b4fb1f4f931041b604e13a11760bb2ba42d6a8fef999d1b4c08",
+  "capacities": [
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80,
+    88,
+    96,
+    104,
+    112,
+    120,
+    128,
+    136,
+    144,
+    152,
+    160,
+    168,
+    176,
+    184,
+    192,
+    200,
+    208,
+    216,
+    224,
+    232,
+    240,
+    248,
+    256,
+    264,
+    272,
+    280,
+    288,
+    296,
+    304,
+    312,
+    320,
+    328,
+    336,
+    344,
+    352,
+    360,
+    368,
+    376,
+    384,
+    392,
+    400,
+    408,
+    416,
+    424,
+    432,
+    440,
+    448,
+    456,
+    464,
+    472,
+    480,
+    488,
+    496,
+    504,
+    512
+  ],
+  "repetitions": 5,
+  "sample_order": "seeded shuffle of all cases in every repetition after one warmup",
+  "results": {
+    "1": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0547688,
+          0.0607244,
+          0.0577567,
+          0.0511747,
+          0.050415
+        ],
+        "median_seconds": 0.0547688,
+        "min_seconds": 0.050415,
+        "max_seconds": 0.0607244,
+        "python_allocation_peak_bytes": 861984
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0037795,
+          0.0046144,
+          0.0032382,
+          0.0033309,
+          0.0042643
+        ],
+        "median_seconds": 0.0037795,
+        "min_seconds": 0.0032382,
+        "max_seconds": 0.0046144,
+        "python_allocation_peak_bytes": 1768
+      }
+    },
+    "4": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0536452,
+          0.0518108,
+          0.0491244,
+          0.0482406,
+          0.0500464
+        ],
+        "median_seconds": 0.0500464,
+        "min_seconds": 0.0482406,
+        "max_seconds": 0.0536452,
+        "python_allocation_peak_bytes": 861976
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0154069,
+          0.0171919,
+          0.0143726,
+          0.0141379,
+          0.0132821
+        ],
+        "median_seconds": 0.0143726,
+        "min_seconds": 0.0132821,
+        "max_seconds": 0.0171919,
+        "python_allocation_peak_bytes": 5672
+      }
+    },
+    "16": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0659364,
+          0.0513534,
+          0.0512281,
+          0.0581996,
+          0.0488739
+        ],
+        "median_seconds": 0.0513534,
+        "min_seconds": 0.0488739,
+        "max_seconds": 0.0659364,
+        "python_allocation_peak_bytes": 861968
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0608559,
+          0.0656474,
+          0.0569607,
+          0.0570015,
+          0.0544383
+        ],
+        "median_seconds": 0.0570015,
+        "min_seconds": 0.0544383,
+        "max_seconds": 0.0656474,
+        "python_allocation_peak_bytes": 22280
+      }
+    },
+    "64": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0673296,
+          0.0580705,
+          0.0506445,
+          0.0487387,
+          0.0494227
+        ],
+        "median_seconds": 0.0506445,
+        "min_seconds": 0.0487387,
+        "max_seconds": 0.0673296,
+        "python_allocation_peak_bytes": 861960
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.2322483,
+          0.2331168,
+          0.2517667,
+          0.2241016,
+          0.2269155
+        ],
+        "median_seconds": 0.2322483,
+        "min_seconds": 0.2241016,
+        "max_seconds": 0.2517667,
+        "python_allocation_peak_bytes": 87688
+      }
+    }
+  },
+  "limitations": "single process/host; no CPU affinity; Python allocations exclude input; not RSS; only own OrderedDict baseline; no external performance claim"
+}

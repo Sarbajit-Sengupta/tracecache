@@ -5,7 +5,9 @@
 TraceCache is an offline Python library and CLI for equal-sized-object caches. It computes an exact
 LRU miss curve, compares FIFO/LRU with offline-optimal Belady, and finds the smallest LRU capacity
 that meets a chosen miss ratio on the supplied trace. Reports include a trace fingerprint, cold
-miss floor and optional cold-start phase windows. No API key, GPU, server or runtime dependency.
+miss floor and cold-start or continuously warmed phase windows. It reads JSONL or CSV, including
+gzip-compressed inputs, and can recompute a saved report to verify its contents. No API key, GPU,
+server or runtime dependency.
 
 ![Example miss curves](evidence/example-curve.svg)
 
@@ -18,17 +20,19 @@ recommend deploying an oracle with knowledge of future requests.
 
 ## Install and run
 
-Requires CPython **3.13 or newer**. Tested locally on Windows 11 / Python 3.13.5. All four hosted
-Windows/Linux and Python 3.13/3.14 jobs passed in the
+Requires CPython **3.13 or newer**. Tested locally on Windows 11 / Python 3.13.5. The 0.1 baseline's
+four hosted Windows/Linux and Python 3.13/3.14 jobs passed in the
 [verified CI run](https://github.com/Sarbajit-Sengupta/tracecache/actions/runs/41317805232).
+The 0.2 changes have a separate validation record in [evidence/NOV2.md](evidence/NOV2.md).
 
 ```powershell
+git clone https://github.com/Sarbajit-Sengupta/tracecache.git
+cd tracecache
 python -m venv .venv
 .venv\Scripts\python -m pip install -e .
 .venv\Scripts\tracecache examples/scan.jsonl --capacities 0,1,2,3,4,5 --target 0.5
 ```
 
-Start with `git clone https://github.com/Sarbajit-Sengupta/tracecache.git` and `cd tracecache`.
 On Linux/macOS use `.venv/bin/python` and `.venv/bin/tracecache`.
 
 Write an evidence report and a standalone chart:
@@ -57,17 +61,47 @@ Keys are limited to 4096 characters; each line to 65,536 bytes including its new
 128 MiB and one million requests by default. `--max-requests` changes the request cap. Increasing
 it can use substantially more RAM. These bounds do not make the parser a hostile-code sandbox.
 
+CSV input uses `--format csv` and exactly one header column named `key`. Standard CSV quoting,
+commas and newlines within quoted keys are supported; blank rows and extra columns are rejected.
+A header-only CSV is a valid empty trace. Files ending in `.gz` are decompressed incrementally;
+both file size and decompressed content are bounded. The fingerprint and `trace_bytes` describe
+the **decompressed bytes**, so plain and gzipped copies of identical content have the same identity.
+The format is recorded separately, and keys still have the same validation limits.
+
+```powershell
+.venv\Scripts\tracecache trace.csv.gz --format csv --capacities 8,32,128
+```
+
 Capacities count **objects, not bytes**, and must be nonnegative integers. Up to 128 capacities
 can be selected. A target is a finite miss ratio in [0,1]. An unreachable target produces
 `"minimum_lru_capacity": null`, rather than an invented estimate. Reports contain counts and
 fingerprints, not request keys or input paths. A fingerprint is not anonymization: dictionary
 attacks can identify predictable traces, and callers must review artifacts before sharing them.
 
-Exit 0 means analysis completed; exit 2 means an input, option or IO error. CLI usage errors also
-exit 2. Files are local and no network is contacted. Input and output paths must differ. Output
-files are overwritten if explicitly selected; multi-file output is not transactional. Never
+Exit 0 means analysis/verification completed; exit 1 means verification found a mismatch; exit 2
+means an input, option or IO error. Files are local and no network is contacted. Input and output
+paths must refer to distinct files, including hard-link aliases. Selected output files are replaced
+atomically after the full contents are flushed, preserving the old file if the write fails before
+replacement. Multi-file output is not transactional, and no power-loss durability guarantee is made. Never
 interpret a preexisting file as evidence that a failed new command completed; check the exit code
 and trace fingerprint.
+
+### Warmed phases and report verification
+
+`--window 1000 --window-mode warm` carries LRU state across windows. Each window then reports the
+misses incurred during that interval; summing them yields the whole-trace count at that capacity.
+The default `--window-mode cold` retains independent cold-start analysis.
+
+```powershell
+.venv\Scripts\tracecache examples/scan.jsonl --capacities 0,2,5 --window 6 --window-mode warm --output warm.json
+.venv\Scripts\tracecache examples/scan.jsonl --verify warm.json
+```
+
+Verification uses the saved report's capacities, target and phase options, recomputes every field
+and checks the fingerprint. For CSV sources also specify `--format csv`. Verification reads reports
+up to 1 MiB; it requires the current tool version and schema 2. Regenerate old schema-1 reports.
+It is a consistency check, not a signature or proof that a trace came from a trustworthy collector.
+Output options cannot be combined with verification.
 
 ## How it works
 
@@ -98,7 +132,8 @@ allow capacity queries without replaying the trace for every size.
 N is requests, U distinct objects, D observed distance bins, C capacity. Input storage is additional.
 The Belady heap uses lazy invalidation and periodic compaction to prevent unlimited heap growth on
 long hit streaks. Its next-use array retains O(N) state. The CLI replays FIFO and Belady for each
-selected capacity, so whole-command performance differs from profiling-only benchmark results.
+selected capacity, except zero/full-fit boundaries whose counts are known from the profile. Whole-command
+performance therefore differs from profiling-only benchmark results.
 
 ### Model and limitations
 
@@ -106,8 +141,8 @@ selected capacity, so whole-command performance differs from profiling-only benc
   admission rejection, writes or variable retrieval costs; mandatory insertion after a miss.
 - Belady's optimality applies to this equal-sized paging model. It is an offline bound, not a
   practical online replacement policy or an optimal variable-size cache algorithm.
-- Window analysis restarts each cache. It measures local cold-start behavior, **not** interval
-  misses in a continuously warmed global simulation.
+- Cold window analysis restarts each cache. Use warm mode for interval misses in a continuously
+  warmed global simulation; each mode is explicitly identified in the report.
 - Exact processing retains the trace and an O(N) tree. This is not a streaming billion-request
   analyzer. Input caps constrain ordinary use, not every possible memory/time exhaustion case.
 - No original cache algorithm is claimed. This is an original implementation and engineering
@@ -155,6 +190,7 @@ measures executed paths; independent oracles provide the stronger correctness ev
 
 ```powershell
 .venv\Scripts\python benchmarks/run.py --requests 50000 --repeat 7 --output evidence/benchmark.json
+.venv\Scripts\python benchmarks/run.py --requests 20000 --repeat 5 --workload uniform --output uniform.json
 ```
 
 The benchmark compares one exact all-capacity profile plus queries with repeated independent
@@ -162,7 +198,8 @@ OrderedDict LRU simulations. It verifies equality before measurement, warms all 
 case order in every repetition, and records raw timings and separate Python-allocation peaks.
 It excludes input construction and IO. Read [the measured results](evidence/BENCHMARK.md).
 
-This is a synthetic workload on one machine. No comparison against libCacheSim, PyMimircache or
+The newer [four-family benchmark](evidence/NOV2.md) adds uniform, cyclic and single-hot-object traces
+to the phased workload. These remain synthetic workloads on one machine. No comparison against libCacheSim, PyMimircache or
 real production workloads was run. For a few capacities a direct O(N) simulation can be faster
 and much smaller. The point is the measured crossover, not a universal speed claim.
 
@@ -179,8 +216,7 @@ This implementation was written here, without copying their implementations. See
 1. Keep the Windows/Linux CI matrix green as the supported model evolves.
 2. Validate adapters against independently licensed public application traces.
 3. Profile wall time/RSS in fresh subprocesses over several trace lengths and workload families.
-4. Add continuous-state phase statistics separately from cold-start windows.
-5. Explore weighted/sampled analysis only with model-specific proofs and independent oracles.
+4. Explore weighted/sampled analysis only with model-specific proofs and independent oracles.
 
 No item on that list is presented as implemented. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
