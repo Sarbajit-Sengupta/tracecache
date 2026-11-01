@@ -1,0 +1,193 @@
+{
+  "python": "3.13.5",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+  "requests": 20000,
+  "seed": 1729,
+  "workload": "phases",
+  "workload_definition": "two hot sets with 20% unique scan traffic",
+  "trace_sha256": "bf81cf4cf3ef25dd281db9f7e2aaddf1894d0290eefd36d8529fed16e160ff81",
+  "capacities": [
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80,
+    88,
+    96,
+    104,
+    112,
+    120,
+    128,
+    136,
+    144,
+    152,
+    160,
+    168,
+    176,
+    184,
+    192,
+    200,
+    208,
+    216,
+    224,
+    232,
+    240,
+    248,
+    256,
+    264,
+    272,
+    280,
+    288,
+    296,
+    304,
+    312,
+    320,
+    328,
+    336,
+    344,
+    352,
+    360,
+    368,
+    376,
+    384,
+    392,
+    400,
+    408,
+    416,
+    424,
+    432,
+    440,
+    448,
+    456,
+    464,
+    472,
+    480,
+    488,
+    496,
+    504,
+    512
+  ],
+  "repetitions": 5,
+  "sample_order": "seeded shuffle of all cases in every repetition after one warmup",
+  "results": {
+    "1": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0475028,
+          0.051473,
+          0.0510639,
+          0.0463984,
+          1.2897003
+        ],
+        "median_seconds": 0.0510639,
+        "min_seconds": 0.0463984,
+        "max_seconds": 1.2897003,
+        "python_allocation_peak_bytes": 448120
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0030753,
+          0.0031656,
+          0.0031082,
+          0.0031187,
+          0.0030671
+        ],
+        "median_seconds": 0.0031082,
+        "min_seconds": 0.0030671,
+        "max_seconds": 0.0031656,
+        "python_allocation_peak_bytes": 1768
+      }
+    },
+    "4": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0589551,
+          0.0459463,
+          0.0433161,
+          0.0480205,
+          0.0476238
+        ],
+        "median_seconds": 0.0476238,
+        "min_seconds": 0.0433161,
+        "max_seconds": 0.0589551,
+        "python_allocation_peak_bytes": 448112
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0133045,
+          0.0157654,
+          0.0127132,
+          0.0128288,
+          0.0122479
+        ],
+        "median_seconds": 0.0128288,
+        "min_seconds": 0.0122479,
+        "max_seconds": 0.0157654,
+        "python_allocation_peak_bytes": 5672
+      }
+    },
+    "16": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0608036,
+          0.0475435,
+          0.0447302,
+          0.0498873,
+          0.0664991
+        ],
+        "median_seconds": 0.0498873,
+        "min_seconds": 0.0447302,
+        "max_seconds": 0.0664991,
+        "python_allocation_peak_bytes": 448104
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0575093,
+          0.0533107,
+          0.0580289,
+          0.0517567,
+          0.047502
+        ],
+        "median_seconds": 0.0533107,
+        "min_seconds": 0.047502,
+        "max_seconds": 0.0580289,
+        "python_allocation_peak_bytes": 22280
+      }
+    },
+    "64": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0536853,
+          0.0459009,
+          0.0505826,
+          0.0432814,
+          0.1398308
+        ],
+        "median_seconds": 0.0505826,
+        "min_seconds": 0.0432814,
+        "max_seconds": 0.1398308,
+        "python_allocation_peak_bytes": 448096
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.1597415,
+          0.1568081,
+          0.145289,
+          0.1400564,
+          0.4532458
+        ],
+        "median_seconds": 0.1568081,
+        "min_seconds": 0.1400564,
+        "max_seconds": 0.4532458,
+        "python_allocation_peak_bytes": 87688
+      }
+    }
+  },
+  "limitations": "single process/host; no CPU affinity; Python allocations exclude input; not RSS; only own OrderedDict baseline; no external performance claim"
+}

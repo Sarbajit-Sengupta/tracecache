@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-02",
+  "wheel": "tracecache-0.2.0-py3-none-any.whl",
+  "sha256": "47b5a9339348014ad77553faab8b4c6463d20d177d6f0fcd83df766061432346",
+  "clean_install": true,
+  "verified_schema": 2,
+  "verified_version": "0.2.0",
+  "scope": "wheel CLI analysis and report recomputation passed; no package registry release"
+}
