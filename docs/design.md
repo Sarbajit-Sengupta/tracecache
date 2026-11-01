@@ -63,5 +63,5 @@ improving the core sizing model. Static SVG is sufficient to share the measured 
 - Benchmark includes raw repetitions, allocation peaks, workload definition and negative results.
 - README/license/contribution guidance and a future hosted CI workflow are included.
 
-Hosted CI, real workloads, future performance and research extensions are not included in that
-local completion claim.
+The four hosted Windows/Linux Python 3.13/3.14 CI jobs subsequently passed; see evidence/hosted-ci.json.
+Real workloads, future performance and research extensions are not included in that completion claim.

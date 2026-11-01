@@ -11,10 +11,10 @@
 - [x] Document negative results and unresolved real-workload validation.
 - [x] Pass local Ruff, formatting, strict mypy and >95% branch-aware coverage.
 - [x] Verify wheel/source distribution and clean install.
-- [ ] Create reviewed commits using the account's signing setup before publication.
-- [ ] Obtain approval before public repository creation or push.
-- [ ] Run hosted Windows/Linux Python 3.13/3.14 matrix after approved publication.
+- [x] Publish reviewed source through GitHub's verified signed-commit API.
+- [x] Obtain approval before public repository creation or push.
+- [x] Pass hosted Windows/Linux Python 3.13/3.14 matrix after approved publication.
 - [ ] Validate a licensed real trace and additional workload families.
 
-Source was developed locally in this assignment. Public release/adoption is not claimed. Later
-portfolio projects remain proposals until this project's acceptance criteria are met.
+The source repository is public and its four hosted CI environments passed. Package-registry
+release and public adoption are not claimed. Later portfolio projects remain proposals.

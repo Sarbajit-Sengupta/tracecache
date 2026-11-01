@@ -18,8 +18,9 @@ recommend deploying an oracle with knowledge of future requests.
 
 ## Install and run
 
-Requires CPython **3.13 or newer**. Tested locally on Windows 11 / Python 3.13.5. The included CI
-matrix targets Windows/Linux and Python 3.13/3.14; hosted execution is pending publication.
+Requires CPython **3.13 or newer**. Tested locally on Windows 11 / Python 3.13.5. All four hosted
+Windows/Linux and Python 3.13/3.14 jobs passed in the
+[verified CI run](https://github.com/Sarbajit-Sengupta/tracecache/actions/runs/41317805232).
 
 ```powershell
 python -m venv .venv
@@ -141,7 +142,8 @@ boundary. Do not mutate a sequence during analysis.
 ```
 
 See [evidence/tests.txt](evidence/tests.txt) and [validation notes](evidence/VALIDATION.md) for actual
-local results. No hosted green badge is shown before hosted checks have run.
+local results and [hosted CI evidence](evidence/hosted-ci.json). The hosted run passed all 43 tests
+on every matrix environment, with branch-aware coverage of 98.84% on Python 3.13 and 98.82% on 3.14.
 
 Tests include a separate list-based LRU oracle, deterministic Hypothesis-generated traces and
 all **3,280 traces of length 0–7 over three symbols**, with four capacities each, compared against
@@ -174,7 +176,7 @@ This implementation was written here, without copying their implementations. See
 
 ## Roadmap
 
-1. Run the included Windows/Linux CI matrix after publication approval.
+1. Keep the Windows/Linux CI matrix green as the supported model evolves.
 2. Validate adapters against independently licensed public application traces.
 3. Profile wall time/RSS in fresh subprocesses over several trace lengths and workload families.
 4. Add continuous-state phase statistics separately from cold-start windows.
