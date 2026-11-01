@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools==84.2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tracecache"
+version = "0.1.0"
+description = "Exact, explainable cache sizing from offline request traces"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+dependencies = []
+
+[project.scripts]
+tracecache = "tracecache.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0", "hypothesis==6.170.14", "ruff==0.15.6", "mypy==2.4.1", "pytest-cov==7.1.0", "build==1.4.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+tracecache = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["src"]
