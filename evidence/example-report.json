@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "tool_version": "0.1.0",
+  "trace_sha256": "772a7d07dd3b0abc9f97510841a3be076dea200842e119c425cbebfb38c082ac",
+  "trace_bytes": 147,
+  "requests": 11,
+  "unique_objects": 5,
+  "cold_misses": 5,
+  "model": "initially empty, fully associative, equal-sized objects, mandatory insertion",
+  "target_miss_ratio": 0.5,
+  "minimum_lru_capacity": 5,
+  "recommendation_scope": "observed trace only; no future-workload guarantee",
+  "curves": [
+    {
+      "capacity": 0,
+      "lru_misses": 11,
+      "fifo_misses": 11,
+      "belady_misses": 11,
+      "lru_gap_to_offline_optimum": 0
+    },
+    {
+      "capacity": 1,
+      "lru_misses": 11,
+      "fifo_misses": 11,
+      "belady_misses": 11,
+      "lru_gap_to_offline_optimum": 0
+    },
+    {
+      "capacity": 2,
+      "lru_misses": 7,
+      "fifo_misses": 7,
+      "belady_misses": 6,
+      "lru_gap_to_offline_optimum": 1
+    },
+    {
+      "capacity": 3,
+      "lru_misses": 7,
+      "fifo_misses": 7,
+      "belady_misses": 5,
+      "lru_gap_to_offline_optimum": 2
+    },
+    {
+      "capacity": 4,
+      "lru_misses": 7,
+      "fifo_misses": 7,
+      "belady_misses": 5,
+      "lru_gap_to_offline_optimum": 2
+    },
+    {
+      "capacity": 5,
+      "lru_misses": 5,
+      "fifo_misses": 5,
+      "belady_misses": 5,
+      "lru_gap_to_offline_optimum": 0
+    }
+  ],
+  "windows": [
+    {
+      "start": 0,
+      "stop": 6,
+      "cold_start": true,
+      "misses": [
+        {
+          "capacity": 0,
+          "lru_misses": 6
+        },
+        {
+          "capacity": 1,
+          "lru_misses": 6
+        },
+        {
+          "capacity": 2,
+          "lru_misses": 4
+        },
+        {
+          "capacity": 3,
+          "lru_misses": 4
+        },
+        {
+          "capacity": 4,
+          "lru_misses": 4
+        },
+        {
+          "capacity": 5,
+          "lru_misses": 4
+        }
+      ]
+    },
+    {
+      "start": 6,
+      "stop": 11,
+      "cold_start": true,
+      "misses": [
+        {
+          "capacity": 0,
+          "lru_misses": 5
+        },
+        {
+          "capacity": 1,
+          "lru_misses": 5
+        },
+        {
+          "capacity": 2,
+          "lru_misses": 3
+        },
+        {
+          "capacity": 3,
+          "lru_misses": 3
+        },
+        {
+          "capacity": 4,
+          "lru_misses": 3
+        },
+        {
+          "capacity": 5,
+          "lru_misses": 3
+        }
+      ]
+    }
+  ]
+}

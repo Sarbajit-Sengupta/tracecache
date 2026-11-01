@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+<title id="title">Cache miss-ratio curves</title>
+<desc id="desc">Observed LRU and FIFO misses compared with offline Belady. Capacity is measured in equal-sized objects.</desc>
+<rect width="760" height="420" fill="#101827"/>
+<g fill="#e2e8f0" font-family="sans-serif" font-size="13">
+<text x="60" y="30" font-size="20">TraceCache · measured cache behavior</text>
+<text x="60" y="400">Capacity (objects) · offline, cold-start trace</text>
+<path d="M60 340 H700" stroke="#334155"/>
+<text x="12" y="344">0%</text>
+<path d="M60 270 H700" stroke="#334155"/>
+<text x="12" y="274">25%</text>
+<path d="M60 200 H700" stroke="#334155"/>
+<text x="12" y="204">50%</text>
+<path d="M60 130 H700" stroke="#334155"/>
+<text x="12" y="134">75%</text>
+<path d="M60 60 H700" stroke="#334155"/>
+<text x="12" y="64">100%</text>
+<polyline points="60.00,60.00 188.00,60.00 316.00,161.82 444.00,161.82 572.00,161.82 700.00,212.73" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+<text x="60" y="365" fill="#38bdf8">LRU</text>
+<polyline points="60.00,60.00 188.00,60.00 316.00,161.82 444.00,161.82 572.00,161.82 700.00,212.73" fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+<text x="210" y="365" fill="#fbbf24">FIFO</text>
+<polyline points="60.00,60.00 188.00,60.00 316.00,187.27 444.00,212.73 572.00,212.73 700.00,212.73" fill="none" stroke="#a78bfa" stroke-width="2.5"/>
+<text x="360" y="365" fill="#a78bfa">Belady (offline)</text>
+<text x="60" y="385">0</text>
+<text x="660" y="385">5</text>
+</g></svg>

@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-01",
+  "wheel": "tracecache-0.1.0-py3-none-any.whl",
+  "sha256": "2140deb515c5ce45576c13513c3adfcda0850219ca2a3cbc749fef9cab7e8f8f",
+  "clean_install": true,
+  "runtime_dependencies": [],
+  "installed_cli_example_requests": 11,
+  "installed_cli_example_minimum_capacity": 5,
+  "typed_marker_in_wheel": true,
+  "hosted_ci": "not run",
+  "hash_locked_environment_smoke": "passed after reinstalling editable package following exact sync",
+  "source_distribution_includes_examples_lock_and_validation": true
+}
