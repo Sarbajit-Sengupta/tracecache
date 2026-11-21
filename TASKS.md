@@ -14,7 +14,8 @@
 - [x] Publish reviewed source through GitHub's verified signed-commit API.
 - [x] Obtain approval before public repository creation or push.
 - [x] Pass hosted Windows/Linux Python 3.13/3.14 matrix after approved publication.
-- [ ] Validate a licensed real trace and additional workload families.
+- [x] Validate four synthetic workload families and record raw repeated measurements.
+- [ ] Validate a licensed real trace.
 
 The source repository is public and its four hosted CI environments passed. Package-registry
 release and public adoption are not claimed. Later portfolio projects remain proposals.

@@ -1,5 +1,6 @@
 """Deterministic, key-free evidence reports and standalone SVG curves."""
 
+from collections import OrderedDict
 from collections.abc import Sequence
 from typing import Any
 
@@ -15,18 +16,25 @@ def analyze(
     *,
     target: float = 0.1,
     window: int = 0,
+    window_mode: str = "cold",
 ) -> dict[str, Any]:
     if not capacities:
         raise ValueError("at least one capacity is required")
     if window < 0:
         raise ValueError("window must be nonnegative")
+    if window_mode not in {"cold", "warm"}:
+        raise ValueError("window mode must be cold or warm")
     profile = profile_lru(trace.keys)
     minimum = profile.minimum_capacity(target)
     rows = []
     for capacity in sorted(set(capacities)):
         lru = profile.misses(capacity)
-        fifo = simulate(trace.keys, capacity, "fifo")
-        optimal = simulate(trace.keys, capacity, "belady")
+        if capacity == 0 or capacity >= profile.unique_objects:
+            # All mandatory-insertion policies share the same boundary counts.
+            fifo = optimal = lru
+        else:
+            fifo = simulate(trace.keys, capacity, "fifo")
+            optimal = simulate(trace.keys, capacity, "belady")
         rows.append(
             {
                 "capacity": capacity,
@@ -36,27 +44,42 @@ def analyze(
                 "lru_gap_to_offline_optimum": lru - optimal,
             }
         )
-    windows = []
+    windows: list[dict[str, Any]] = []
     if window:
         for start in range(0, len(trace.keys), window):
             section = trace.keys[start : start + window]
-            local = profile_lru(section)
+            local = profile_lru(section) if window_mode == "cold" else None
             windows.append(
                 {
                     "start": start,
                     "stop": start + len(section),
-                    "cold_start": True,
+                    "cold_start": window_mode == "cold",
                     "misses": [
-                        {"capacity": c, "lru_misses": local.misses(c)}
+                        {"capacity": c, "lru_misses": local.misses(c) if local else 0}
                         for c in sorted(set(capacities))
                     ],
                 }
             )
+        if window_mode == "warm":
+            for column, capacity in enumerate(sorted(set(capacities))):
+                cache: OrderedDict[str, None] = OrderedDict()
+                for position, key in enumerate(trace.keys):
+                    if key in cache:
+                        cache.move_to_end(key)
+                    else:
+                        row_index = position // window
+                        entry = windows[row_index]["misses"][column]
+                        entry["lru_misses"] += 1
+                        if capacity:
+                            if len(cache) == capacity:
+                                cache.popitem(last=False)
+                            cache[key] = None
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "tool_version": __version__,
         "trace_sha256": trace.sha256,
         "trace_bytes": trace.byte_count,
+        "trace_format": trace.trace_format,
         "requests": profile.requests,
         "unique_objects": profile.unique_objects,
         "cold_misses": profile.cold_misses,
@@ -66,6 +89,8 @@ def analyze(
         "recommendation_scope": "observed trace only; no future-workload guarantee",
         "curves": rows,
         "windows": windows,
+        "window_size": window,
+        "window_mode": window_mode,
     }
 
 

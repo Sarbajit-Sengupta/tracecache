@@ -1,0 +1,19 @@
+........................................................................ [ 81%]
+................                                                         [100%]
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                         Stmts   Miss Branch BrPart  Cover   Missing
+------------------------------------------------------------------------
+src\tracecache\__init__.py       4      0      0      0   100%
+src\tracecache\cli.py           53      1     14      1    97%   76
+src\tracecache\output.py        20      0      8      0   100%
+src\tracecache\profile.py       71      0     22      0   100%
+src\tracecache\report.py        59      0     30      0   100%
+src\tracecache\simulate.py      49      0     28      2    97%   51->56, 53->51
+src\tracecache\trace.py         76      0     32      0   100%
+src\tracecache\verify.py        42      0     18      0   100%
+------------------------------------------------------------------------
+TOTAL                          374      1    152      3    99%
+Required test coverage of 95% reached. Total coverage: 99.24%
+88 passed in 4.26s

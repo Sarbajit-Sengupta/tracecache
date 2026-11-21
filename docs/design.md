@@ -39,14 +39,27 @@ positions still take O(N) memory; this is deliberately offline.
 
 ## Decision 005: evidence and privacy boundaries
 
-Reports use schema version 1 and a SHA-256 of the exact trace bytes. They omit keys and local input
+Reports use schema version 2 and a SHA-256 of the exact decoded trace bytes. For gzip input this
+means decompressed bytes; JSONL/CSV format is recorded separately. They omit keys and local input
 paths. The same trace/options produce the same JSON payload (no timestamp noise). Two differently
 encoded traces with identical key sequences may have different hashes. Empty input is explicit.
 
 This is local analysis, not a sandbox or a cryptographic attestation system. A report can be edited
 after generation. Hashing does not prove who collected the trace or anonymize low-entropy inputs.
-Output paths are explicit and can overwrite prior reports; errors return a nonzero exit. Check the
+Output paths are explicit and can replace prior reports atomically one file at a time; errors return a nonzero exit. Check the
 command exit code and fingerprint before accepting evidence. Multi-artifact writes are not atomic.
+
+Version 0.2 additionally checks file identity, including hard links, before selecting outputs.
+Each write uses a same-directory temporary file, flush/fsync and os.replace, with cleanup on error.
+This preserves an old report on pre-replacement failures; it does not promise an atomic JSON+SVG
+transaction or directory-durable power-loss recovery. A report verifier recomputes its declared
+analysis under the current schema/version. It detects changed counts or content, but is not a
+cryptographic attestation and does not establish who collected the trace.
+
+Warm phase analysis replays an independent LRU state continuously across window boundaries. Its
+per-window misses partition the global count; property tests verify that invariant. Cold windows
+retain the original independently restarted profiles. Zero/full-fit capacities reuse known exact
+boundary counts instead of unnecessarily replaying FIFO/Belady.
 
 ## Decision 006: no premature native backend or web UI
 

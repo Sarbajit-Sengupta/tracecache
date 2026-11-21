@@ -5,8 +5,10 @@ import json
 import sys
 from pathlib import Path
 
+from .output import atomic_write, check_distinct
 from .report import analyze, render_svg
 from .trace import read_trace
+from .verify import load_report, verify
 
 
 def _capacities(value: str) -> list[int]:
@@ -27,24 +29,43 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--capacities", type=_capacities, default=[0, 16, 64, 256])
     parser.add_argument("--target", type=float, default=0.1, help="observed target miss ratio")
     parser.add_argument("--window", type=int, default=0, help="cold-start phase window in requests")
+    parser.add_argument("--window-mode", choices=["cold", "warm"], default="cold")
+    parser.add_argument("--format", choices=["jsonl", "csv"], default="jsonl")
+    parser.add_argument(
+        "--verify", type=Path, help="recompute an existing report instead of writing"
+    )
     parser.add_argument("--max-requests", type=int, default=1_000_000)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--svg", type=Path)
     args = parser.parse_args(argv)
     try:
-        inputs = args.trace.resolve()
-        destinations = [p.resolve() for p in (args.output, args.svg) if p is not None]
-        if inputs in destinations or len(set(destinations)) != len(destinations):
-            raise ValueError("input and output paths must be distinct")
-        trace = read_trace(args.trace, max_requests=args.max_requests)
-        report = analyze(trace, args.capacities, target=args.target, window=args.window)
+        check_distinct([args.trace, *[p for p in (args.output, args.svg) if p is not None]])
+        trace = read_trace(args.trace, max_requests=args.max_requests, trace_format=args.format)
+        if args.verify:
+            if args.output or args.svg:
+                raise ValueError("--verify cannot be combined with output files")
+            if not verify(trace, load_report(args.verify)):
+                print(
+                    "tracecache: report does not match the trace and recomputed counts",
+                    file=sys.stderr,
+                )
+                return 1
+            print("Verified: trace fingerprint and all recomputed report fields match.")
+            return 0
+        report = analyze(
+            trace,
+            args.capacities,
+            target=args.target,
+            window=args.window,
+            window_mode=args.window_mode,
+        )
         serialized = json.dumps(report, indent=2, allow_nan=False) + "\n"
         if args.output:
-            args.output.write_text(serialized, encoding="utf-8")
+            atomic_write(args.output, serialized)
         else:
             sys.stdout.write(serialized)
         if args.svg:
-            args.svg.write_text(render_svg(report), encoding="utf-8")
+            atomic_write(args.svg, render_svg(report))
     except (OSError, ValueError) as exc:
         print(f"tracecache: {exc}", file=sys.stderr)
         return 2

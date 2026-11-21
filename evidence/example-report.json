@@ -1,8 +1,9 @@
 {
-  "schema_version": 1,
-  "tool_version": "0.1.0",
+  "schema_version": 2,
+  "tool_version": "0.2.0",
   "trace_sha256": "772a7d07dd3b0abc9f97510841a3be076dea200842e119c425cbebfb38c082ac",
   "trace_bytes": 147,
+  "trace_format": "jsonl",
   "requests": 11,
   "unique_objects": 5,
   "cold_misses": 5,
@@ -117,5 +118,7 @@
         }
       ]
     }
-  ]
+  ],
+  "window_size": 6,
+  "window_mode": "cold"
 }

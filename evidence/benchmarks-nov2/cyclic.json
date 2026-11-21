@@ -1,0 +1,193 @@
+{
+  "python": "3.13.5",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+  "requests": 20000,
+  "seed": 1729,
+  "workload": "cyclic",
+  "workload_definition": "ordered loop over 1024 objects",
+  "trace_sha256": "cf2c0449a8ac4569a74f2740a198fe8da2a29531380f92c4456b1e6f1007ce8a",
+  "capacities": [
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56,
+    64,
+    72,
+    80,
+    88,
+    96,
+    104,
+    112,
+    120,
+    128,
+    136,
+    144,
+    152,
+    160,
+    168,
+    176,
+    184,
+    192,
+    200,
+    208,
+    216,
+    224,
+    232,
+    240,
+    248,
+    256,
+    264,
+    272,
+    280,
+    288,
+    296,
+    304,
+    312,
+    320,
+    328,
+    336,
+    344,
+    352,
+    360,
+    368,
+    376,
+    384,
+    392,
+    400,
+    408,
+    416,
+    424,
+    432,
+    440,
+    448,
+    456,
+    464,
+    472,
+    480,
+    488,
+    496,
+    504,
+    512
+  ],
+  "repetitions": 5,
+  "sample_order": "seeded shuffle of all cases in every repetition after one warmup",
+  "results": {
+    "1": {
+      "fenwick_profile": {
+        "seconds": [
+          0.057831,
+          0.0698105,
+          0.0720856,
+          0.0683256,
+          0.0678706
+        ],
+        "median_seconds": 0.0683256,
+        "min_seconds": 0.057831,
+        "max_seconds": 0.0720856,
+        "python_allocation_peak_bytes": 216104
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0033472,
+          0.0045722,
+          0.0050463,
+          0.0048269,
+          0.0040139
+        ],
+        "median_seconds": 0.0045722,
+        "min_seconds": 0.0033472,
+        "max_seconds": 0.0050463,
+        "python_allocation_peak_bytes": 1768
+      }
+    },
+    "4": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0571923,
+          0.0744077,
+          0.0773991,
+          0.0656677,
+          0.0673293
+        ],
+        "median_seconds": 0.0673293,
+        "min_seconds": 0.0571923,
+        "max_seconds": 0.0773991,
+        "python_allocation_peak_bytes": 216096
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.01448,
+          0.018071,
+          0.019395,
+          0.0176822,
+          0.0174247
+        ],
+        "median_seconds": 0.0176822,
+        "min_seconds": 0.01448,
+        "max_seconds": 0.019395,
+        "python_allocation_peak_bytes": 5672
+      }
+    },
+    "16": {
+      "fenwick_profile": {
+        "seconds": [
+          0.0648165,
+          0.1146775,
+          0.0686546,
+          0.0694329,
+          0.0684383
+        ],
+        "median_seconds": 0.0686546,
+        "min_seconds": 0.0648165,
+        "max_seconds": 0.1146775,
+        "python_allocation_peak_bytes": 216088
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.0639619,
+          0.0888397,
+          0.0762366,
+          0.0775781,
+          0.0748316
+        ],
+        "median_seconds": 0.0762366,
+        "min_seconds": 0.0639619,
+        "max_seconds": 0.0888397,
+        "python_allocation_peak_bytes": 22280
+      }
+    },
+    "64": {
+      "fenwick_profile": {
+        "seconds": [
+          0.059332,
+          0.0783507,
+          0.0687328,
+          0.0658879,
+          0.0755421
+        ],
+        "median_seconds": 0.0687328,
+        "min_seconds": 0.059332,
+        "max_seconds": 0.0783507,
+        "python_allocation_peak_bytes": 216080
+      },
+      "ordered_dict_replays": {
+        "seconds": [
+          0.2658581,
+          0.3640975,
+          0.3282928,
+          0.2908837,
+          0.3503687
+        ],
+        "median_seconds": 0.3282928,
+        "min_seconds": 0.2658581,
+        "max_seconds": 0.3640975,
+        "python_allocation_peak_bytes": 87688
+      }
+    }
+  },
+  "limitations": "single process/host; no CPU affinity; Python allocations exclude input; not RSS; only own OrderedDict baseline; no external performance claim"
+}

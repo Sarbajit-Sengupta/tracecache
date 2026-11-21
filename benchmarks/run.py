@@ -20,8 +20,14 @@ from pathlib import Path
 from tracecache import profile_lru, simulate
 
 
-def workload(size: int, seed: int) -> list[str]:
+def workload(size: int, seed: int, kind: str = "phases") -> list[str]:
     rng = random.Random(seed)
+    if kind == "uniform":
+        return [str(rng.randrange(4096)) for _ in range(size)]
+    if kind == "cyclic":
+        return [str(i % 1024) for i in range(size)]
+    if kind == "hot":
+        return ["hot"] * size
     # Two hot-set phases separated by a scan. Entirely synthetic.
     return [
         str(
@@ -70,11 +76,14 @@ def main() -> None:
     parser.add_argument("--requests", type=int, default=50_000)
     parser.add_argument("--repeat", type=int, default=5)
     parser.add_argument("--seed", type=int, default=1729)
+    parser.add_argument(
+        "--workload", choices=["phases", "uniform", "cyclic", "hot"], default="phases"
+    )
     parser.add_argument("--output", type=Path, default=Path("evidence/benchmark.json"))
     args = parser.parse_args()
     if args.requests < 1 or args.repeat < 3:
         parser.error("requests must be positive; repeat must be at least three")
-    trace = workload(args.requests, args.seed)
+    trace = workload(args.requests, args.seed, args.workload)
     capacities = list(range(8, 513, 8))
     profile = profile_lru(trace)
     expected = [simulate(trace, c) for c in capacities]
@@ -106,7 +115,13 @@ def main() -> None:
         "processor": platform.processor(),
         "requests": len(trace),
         "seed": args.seed,
-        "workload": "synthetic two hot sets with 20% unique scan traffic",
+        "workload": args.workload,
+        "workload_definition": {
+            "phases": "two hot sets with 20% unique scan traffic",
+            "uniform": "independent uniform draws from 4096 objects",
+            "cyclic": "ordered loop over 1024 objects",
+            "hot": "one repeatedly referenced object",
+        }[args.workload],
         "trace_sha256": hashlib.sha256(json.dumps(trace).encode()).hexdigest(),
         "capacities": capacities,
         "repetitions": args.repeat,
