@@ -46,4 +46,4 @@ def verify(trace: Trace, report: dict[str, Any]) -> bool:
     if not isinstance(mode, str) or mode not in {"cold", "warm"}:
         raise ValueError("invalid verification window mode")
     computed = analyze(trace, capacities, target=target, window=window, window_mode=mode)
-    return computed == report
+    return json.dumps(computed, sort_keys=True) == json.dumps(report, sort_keys=True)
